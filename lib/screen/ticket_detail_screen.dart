@@ -271,20 +271,20 @@ class _BoardingDetails extends StatelessWidget {
           const Gap(12),
           _DetailRow(label: 'Passport', value: ticket.passport),
           const Gap(12),
-          LayoutBuilderWidget(sections: 12, isColor: true),
+          const LayoutBuilderWidget(sections: 12, isColor: true),
           const Gap(12),
           _DetailRow(label: 'E-Ticket', value: ticket.eTicket),
           const Gap(12),
           _DetailRow(label: 'Booking Code', value: ticket.bookingCode),
           const Gap(12),
-          LayoutBuilderWidget(sections: 12, isColor: true),
+          const LayoutBuilderWidget(sections: 12, isColor: true),
           const Gap(12),
           _DetailRow(label: 'Terminal', value: ticket.terminal),
           const Gap(12),
           _DetailRow(
               label: 'Seat', value: '${ticket.seat} (${ticket.ticketClass})'),
           const Gap(12),
-          LayoutBuilderWidget(sections: 12, isColor: true),
+          const LayoutBuilderWidget(sections: 12, isColor: true),
           const Gap(12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -443,7 +443,7 @@ class _PassengerSelectionSheetState extends State<_PassengerSelectionSheet> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Styles.primarycolor,
                     width: 2,
                   ),

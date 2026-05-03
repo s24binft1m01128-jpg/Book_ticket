@@ -50,47 +50,57 @@ class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: widget.child,
-      bottomNavigationBar: ClipRect(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: Styles.softShadow,
-            border: const Border(
-              top: BorderSide(color: Styles.lineColor),
-            ),
-          ),
-          child: SafeArea(
-            top: false,
-            child: NavigationBar(
-              selectedIndex: _selectedIndex,
-              onDestinationSelected: _onItemTapped,
-              height: 72,
-              backgroundColor: Colors.white,
-              indicatorColor: Styles.primarycolor.withValues(alpha: 0.12),
-              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-              destinations: const [
-                NavigationDestination(
-                  icon: Icon(FluentSystemIcons.ic_fluent_home_regular),
-                  selectedIcon: Icon(FluentSystemIcons.ic_fluent_home_filled),
-                  label: 'Home',
-                ),
-                NavigationDestination(
-                  icon: Icon(FluentSystemIcons.ic_fluent_search_regular),
-                  selectedIcon: Icon(FluentSystemIcons.ic_fluent_search_filled),
-                  label: 'Search',
-                ),
-                NavigationDestination(
-                  icon: Icon(FluentSystemIcons.ic_fluent_ticket_regular),
-                  selectedIcon: Icon(FluentSystemIcons.ic_fluent_ticket_filled),
-                  label: 'Tickets',
-                ),
-                NavigationDestination(
-                  icon: Icon(FluentSystemIcons.ic_fluent_person_regular),
-                  selectedIcon: Icon(FluentSystemIcons.ic_fluent_person_filled),
-                  label: 'Profile',
-                ),
-              ],
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 14),
+          child: Material(
+            elevation: 0,
+            color: Colors.transparent,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Styles.surfaceColor,
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(color: Styles.lineColor.withValues(alpha: 0.55)),
+                boxShadow: Styles.softShadow,
+              ),
+              child: NavigationBar(
+                selectedIndex: _selectedIndex,
+                onDestinationSelected: _onItemTapped,
+                height: 68,
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                surfaceTintColor: Colors.transparent,
+                indicatorColor: Styles.primarycolor.withValues(alpha: 0.14),
+                labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+                destinations: const [
+                  NavigationDestination(
+                    icon: Icon(FluentSystemIcons.ic_fluent_home_regular),
+                    selectedIcon: Icon(FluentSystemIcons.ic_fluent_home_filled),
+                    label: 'Home',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(FluentSystemIcons.ic_fluent_search_regular),
+                    selectedIcon:
+                        Icon(FluentSystemIcons.ic_fluent_search_filled),
+                    label: 'Search',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(FluentSystemIcons.ic_fluent_ticket_regular),
+                    selectedIcon:
+                        Icon(FluentSystemIcons.ic_fluent_ticket_filled),
+                    label: 'Tickets',
+                  ),
+                  NavigationDestination(
+                    icon: Icon(FluentSystemIcons.ic_fluent_person_regular),
+                    selectedIcon:
+                        Icon(FluentSystemIcons.ic_fluent_person_filled),
+                    label: 'Profile',
+                  ),
+                ],
+              ),
             ),
           ),
         ),

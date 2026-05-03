@@ -1,0 +1,2 @@
+# Used by `dart test` / `flutter test` so runs emit readable lines instead of a silent compact reporter.
+reporter: expanded

@@ -102,7 +102,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 28,
               ),
               children: [
-                const Text(
+                Text(
                   'Find your next trip',
                   style: Styles.headlineStyle1,
                 ),
@@ -318,16 +318,28 @@ class _SearchField extends StatelessWidget {
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
         hintText: hint,
-        prefixIcon: Icon(icon),
+        prefixIcon: Icon(icon, color: Styles.mutedTextColor),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Styles.surfaceColor,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 18,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(22),
+          borderSide: BorderSide(
+            color: Styles.lineColor.withValues(alpha: 0.65),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(22),
+          borderSide: BorderSide(
+            color: Styles.lineColor.withValues(alpha: 0.65),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(22),
+          borderSide: const BorderSide(color: Styles.primarycolor, width: 1.5),
         ),
       ),
     );

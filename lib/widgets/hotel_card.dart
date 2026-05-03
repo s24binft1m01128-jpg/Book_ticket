@@ -1,4 +1,5 @@
 import 'package:bookticket/models/hotel_model.dart';
+import 'package:bookticket/utils/app_styles.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -52,14 +53,11 @@ class _HotelCardState extends State<HotelCard>
           height: 250,
           margin: const EdgeInsets.only(right: 16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(22),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x1A000000),
-                blurRadius: 16,
-                offset: Offset(0, 6),
-              ),
-            ],
+            borderRadius: BorderRadius.circular(26),
+            border: Border.all(
+              color: Styles.lineColor.withValues(alpha: 0.35),
+            ),
+            boxShadow: Styles.softShadow,
           ),
           clipBehavior: Clip.hardEdge,
           child: Stack(

@@ -85,7 +85,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 const Gap(16),
                 if (tickets.isNotEmpty)
                   SizedBox(
-                    height: 189,
+                    height: 228,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: tickets.length,
@@ -150,7 +150,7 @@ class _TopBar extends StatelessWidget {
                 style: Styles.headlineStyle4,
               ),
               const Gap(6),
-              const Text(
+              Text(
                 'Book Tickets',
                 style: Styles.headlineStyle1,
               ),
@@ -158,6 +158,16 @@ class _TopBar extends StatelessWidget {
           ),
         ),
         IconButton.filledTonal(
+          style: IconButton.styleFrom(
+            backgroundColor: Styles.surfaceColor,
+            foregroundColor: Styles.primarycolor,
+            elevation: 0,
+            shadowColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(color: Styles.lineColor.withValues(alpha: 0.7)),
+            ),
+          ),
           onPressed: () {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
@@ -170,13 +180,25 @@ class _TopBar extends StatelessWidget {
         const Gap(10),
         GestureDetector(
           onTap: () => context.push('/profile'),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              userProfile.avatarPath,
-              width: 52,
-              height: 52,
-              fit: BoxFit.cover,
+          child: Container(
+            padding: const EdgeInsets.all(2.5),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              gradient: const LinearGradient(
+                colors: [
+                  Styles.primarycolor,
+                  Styles.secondaryColor,
+                ],
+              ),
+              boxShadow: Styles.cardLift,
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                userProfile.avatarPath,
+                width: 48,
+                height: 48,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
@@ -187,7 +209,7 @@ class _TopBar extends StatelessWidget {
 
 // ─── Search Bar ──────────────────────────────────────────────────────────────
 
-class _SearchBar extends StatelessWidget {
+class _SearchBar extends StatefulWidget {
   final TextEditingController controller;
   final ValueChanged<String> onChanged;
 
@@ -197,36 +219,70 @@ class _SearchBar extends StatelessWidget {
   });
 
   @override
+  State<_SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<_SearchBar> {
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_sync);
+  }
+
+  @override
+  void dispose() {
+    widget.controller.removeListener(_sync);
+    super.dispose();
+  }
+
+  void _sync() => setState(() {});
+
+  @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller,
-      onChanged: onChanged,
+      controller: widget.controller,
+      onChanged: widget.onChanged,
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
         hintText: 'Search flights, cities, or hotels',
-        prefixIcon: const Icon(FluentSystemIcons.ic_fluent_search_regular),
-        suffixIcon: controller.text.isEmpty
+        prefixIcon: const Icon(
+          FluentSystemIcons.ic_fluent_search_regular,
+          color: Styles.mutedTextColor,
+        ),
+        suffixIcon: widget.controller.text.isEmpty
             ? null
-            : AnimatedOpacity(
-                opacity: 1.0,
-                duration: const Duration(milliseconds: 200),
-                child: IconButton(
-                  onPressed: () {
-                    controller.clear();
-                    onChanged('');
-                  },
-                  icon: const Icon(Icons.close_rounded),
+            : IconButton(
+                onPressed: () {
+                  widget.controller.clear();
+                  widget.onChanged('');
+                  setState(() {});
+                },
+                icon: const Icon(
+                  Icons.close_rounded,
+                  color: Styles.mutedTextColor,
                 ),
               ),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Styles.surfaceColor,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 18,
-          vertical: 16,
+          vertical: 17,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(18),
-          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(22),
+          borderSide: BorderSide(
+            color: Styles.lineColor.withValues(alpha: 0.65),
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(22),
+          borderSide: BorderSide(
+            color: Styles.lineColor.withValues(alpha: 0.65),
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(22),
+          borderSide: const BorderSide(color: Styles.primarycolor, width: 1.5),
         ),
       ),
     );
@@ -248,16 +304,12 @@ class _HeroTripCard extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF172033), Color(0xFF2F6FED)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          gradient: Styles.heroGradient,
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF2F6FED).withValues(alpha: 0.35),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
+              color: Styles.primarycolor.withValues(alpha: 0.38),
+              blurRadius: 28,
+              offset: const Offset(0, 14),
             ),
           ],
         ),
@@ -344,12 +396,20 @@ class _HeroTripCard extends StatelessWidget {
                     style: FilledButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Styles.textcolor,
-                      minimumSize: const Size(120, 54),
+                      minimumSize: const Size(120, 52),
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    child: const Text('Book now'),
+                    child: Text(
+                      'Book now',
+                      style: Styles.headlineStyle4.copyWith(
+                        color: Styles.textcolor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
               ],

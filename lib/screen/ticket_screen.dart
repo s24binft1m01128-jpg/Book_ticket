@@ -25,7 +25,44 @@ class TicketsScreen extends ConsumerWidget {
               maxWidth: AppLayout.contentWidth(context),
             ),
             child: tickets.isEmpty
-                ? const Center(child: Text('No tickets found.'))
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(22),
+                            decoration: BoxDecoration(
+                              color: Styles.surfaceColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Styles.lineColor.withValues(alpha: 0.6),
+                              ),
+                              boxShadow: Styles.softShadow,
+                            ),
+                            child: Icon(
+                              Icons.confirmation_number_outlined,
+                              size: 44,
+                              color: Styles.primarycolor.withValues(alpha: 0.85),
+                            ),
+                          ),
+                          const Gap(24),
+                          Text(
+                            'No tickets yet',
+                            style: Styles.headlineStyle2,
+                            textAlign: TextAlign.center,
+                          ),
+                          const Gap(8),
+                          Text(
+                            'Book a flight from Home or Search — your boarding passes show up here.',
+                            style: Styles.headlineStyle4,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 : ListView(
                     padding: EdgeInsets.fromLTRB(
                       horizontalPadding,
@@ -34,7 +71,7 @@ class TicketsScreen extends ConsumerWidget {
                       28,
                     ),
                     children: [
-                      const Text(
+                      Text(
                         'My Tickets',
                         style: Styles.headlineStyle1,
                       ),

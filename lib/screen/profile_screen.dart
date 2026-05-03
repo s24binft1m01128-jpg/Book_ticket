@@ -57,7 +57,7 @@ class ProfileScreen extends ConsumerWidget {
                 const Gap(24),
                 _MilesCard(userProfile: userProfile),
                 const Gap(24),
-                const Text('Account', style: Styles.headlineStyle2),
+                Text('Account', style: Styles.headlineStyle2),
                 const Gap(12),
                 _ActionTile(
                   icon: Icons.credit_card_rounded,
@@ -153,7 +153,7 @@ class _EditProfileSheetState extends ConsumerState<_EditProfileSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Edit profile', style: Styles.headlineStyle2),
+          Text('Edit profile', style: Styles.headlineStyle2),
           const Gap(16),
           TextField(
             controller: _nameController,
@@ -359,7 +359,7 @@ class _MilesCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Accumulated miles', style: Styles.headlineStyle2),
+          Text('Accumulated miles', style: Styles.headlineStyle2),
           const Gap(14),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -369,8 +369,8 @@ class _MilesCard extends StatelessWidget {
                 style: Styles.headlineStyle1.copyWith(fontSize: 40),
               ),
               const Gap(8),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 7),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 7),
                 child: Text('miles', style: Styles.headlineStyle4),
               ),
             ],
@@ -446,7 +446,7 @@ class _MilesRow extends StatelessWidget {
                   children: [
                     Text(miles, style: Styles.headlineStyle3),
                     const Gap(4),
-                    const Text('Miles', style: Styles.headlineStyle4),
+                    Text('Miles', style: Styles.headlineStyle4),
                   ],
                 ),
               ),
@@ -455,7 +455,7 @@ class _MilesRow extends StatelessWidget {
                 children: [
                   Text(source, style: Styles.headlineStyle3),
                   const Gap(4),
-                  const Text('Received from', style: Styles.headlineStyle4),
+                  Text('Received from', style: Styles.headlineStyle4),
                 ],
               ),
             ],

@@ -6,6 +6,7 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class TicketConfirmationScreen extends StatelessWidget {
   final TicketModel ticket;
@@ -21,14 +22,10 @@ class TicketConfirmationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final horizontalPadding = AppLayout.horizontalPadding(context);
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/home',
-          (route) => false,
-        );
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) context.go('/');
       },
       child: Scaffold(
         backgroundColor: Styles.bgcolor,
@@ -36,7 +33,7 @@ class TicketConfirmationScreen extends StatelessWidget {
           backgroundColor: Styles.bgcolor,
           elevation: 0,
           automaticallyImplyLeading: false,
-          title: const Text(
+          title: Text(
             'Booking Confirmed',
             style: Styles.headlineStyle2,
           ),
@@ -137,11 +134,7 @@ class TicketConfirmationScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
-                      onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/home',
-                        (route) => false,
-                      ),
+                      onPressed: () => context.go('/'),
                       icon: const Icon(
                         FluentSystemIcons.ic_fluent_home_regular,
                       ),
@@ -368,7 +361,7 @@ class TicketConfirmationScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Barcode',
             style: Styles.headlineStyle4,
           ),
@@ -403,7 +396,7 @@ class TicketConfirmationScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'E-Ticket QR Code',
             style: Styles.headlineStyle4,
           ),
@@ -555,7 +548,7 @@ class TicketConfirmationScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text(
+        title: Text(
           'Share Booking',
           style: Styles.headlineStyle3,
         ),

@@ -25,6 +25,9 @@ class AppTicketTabs extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18),
         color: Styles.ticketTabColor,
+        border: Border.all(
+          color: Styles.lineColor.withValues(alpha: 0.45),
+        ),
       ),
       child: Row(
         children: List.generate(labels.length, (index) {

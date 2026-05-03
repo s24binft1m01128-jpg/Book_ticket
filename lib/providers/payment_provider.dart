@@ -4,7 +4,7 @@ import 'package:bookticket/models/payment_model.dart';
 class PaymentNotifier extends StateNotifier<List<PaymentMethod>> {
   PaymentNotifier()
       : super([
-          PaymentMethod(
+          const PaymentMethod(
             id: '1',
             cardNumber: '4532123456789010',
             holderName: 'John Doe',
@@ -14,7 +14,7 @@ class PaymentNotifier extends StateNotifier<List<PaymentMethod>> {
             isDefault: true,
             cardBrand: 'visa',
           ),
-          PaymentMethod(
+          const PaymentMethod(
             id: '2',
             cardNumber: '5425233010103010',
             holderName: 'John Doe',
@@ -27,11 +27,41 @@ class PaymentNotifier extends StateNotifier<List<PaymentMethod>> {
         ]);
 
   void addPaymentMethod(PaymentMethod method) {
-    state = [...state, method];
+    final firstCard = state.isEmpty;
+    final added = method.copyWith(isDefault: firstCard ? true : method.isDefault);
+    if (added.isDefault && !firstCard) {
+      state = [
+        ...state.map((m) => m.copyWith(isDefault: false)),
+        added,
+      ];
+    } else if (added.isDefault && firstCard) {
+      state = [added];
+    } else {
+      state = [...state, added];
+    }
   }
 
   void removePaymentMethod(String id) {
-    state = state.where((method) => method.id != id).toList();
+    PaymentMethod? removed;
+    for (final m in state) {
+      if (m.id == id) {
+        removed = m;
+        break;
+      }
+    }
+    final next = state.where((m) => m.id != id).toList();
+    if (next.isEmpty) {
+      state = [];
+      return;
+    }
+    if (removed?.isDefault == true || !next.any((m) => m.isDefault)) {
+      state = [
+        next.first.copyWith(isDefault: true),
+        ...next.skip(1).map((m) => m.copyWith(isDefault: false)),
+      ];
+    } else {
+      state = next;
+    }
   }
 
   void updatePaymentMethod(PaymentMethod updatedMethod) {

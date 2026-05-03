@@ -23,44 +23,36 @@ class TicketView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isBig = isColor == null;
-    final ticketKey = 'ticket-${ticket.number}';
+
+    final stackGap = wholeScreen ? 16.0 : (isBig ? 10.0 : 12.0);
 
     final card = Container(
       width: wholeScreen ? double.maxFinite : 323,
-      height: wholeScreen ? null : 189,
+      height: wholeScreen ? null : 228,
       margin: EdgeInsets.only(right: wholeScreen ? 0 : 16),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(wholeScreen ? 16 : 14),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(isBig ? 28 : 18),
-        gradient: isBig
-            ? const LinearGradient(
-                colors: [Color(0xFF3B3B3B), Color(0xFF2F6FED)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              )
-            : const LinearGradient(
-                colors: [Color(0xFFFEFEFE), Color(0xFFF8F8F8)],
-              ),
-        boxShadow: Styles.softShadow,
+        borderRadius: BorderRadius.circular(isBig ? 28 : 20),
+        gradient: isBig ? Styles.ticketHeroGradient : Styles.ticketLightGradient,
+        border: isBig
+            ? null
+            : Border.all(color: Styles.lineColor.withValues(alpha: 0.45)),
+        boxShadow: isBig ? Styles.softShadow : Styles.cardLift,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _TicketHeader(ticket: ticket, isBig: isBig),
-          const Gap(16),
+          Gap(stackGap),
           _TicketRoute(ticket: ticket, isBig: isBig),
-          const Gap(16),
+          Gap(stackGap),
           _TicketDetails(ticket: ticket, isBig: isBig, onTap: onTap),
         ],
       ),
     );
 
-    // FIX 4: onTap handled cleanly — wrap in GestureDetector only if provided
-    return Hero(
-      tag: ticketKey,
-      child: onTap != null ? GestureDetector(onTap: onTap, child: card) : card,
-    );
+    return onTap != null ? GestureDetector(onTap: onTap, child: card) : card;
   }
 }
 
@@ -85,8 +77,8 @@ class _TicketHeader extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           decoration: BoxDecoration(
             color:
-                isBig ? Colors.white.withValues(alpha: 0.14) : Styles.bgcolor,
-            borderRadius: BorderRadius.circular(6),
+                isBig ? Colors.white.withValues(alpha: 0.14) : Styles.surfaceMuted,
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
             ticket.status,

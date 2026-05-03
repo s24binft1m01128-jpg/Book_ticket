@@ -1,6 +1,8 @@
 import 'package:bookticket/models/payment_model.dart';
 import 'package:bookticket/models/ticket_model.dart';
 import 'package:bookticket/providers/payment_provider.dart';
+import 'package:bookticket/screen/payment_methods_screen.dart';
+import 'package:bookticket/screen/ticket_confirmation_screen.dart';
 import 'package:bookticket/utils/app_layout.dart';
 import 'package:bookticket/utils/app_styles.dart';
 import 'package:bookticket/utils/notification_service.dart';
@@ -37,6 +39,22 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     final paymentMethods = ref.watch(paymentMethodsProvider);
+
+    ref.listen<List<PaymentMethod>>(paymentMethodsProvider, (previous, next) {
+      if (!mounted) return;
+      if (next.isEmpty) {
+        setState(() => selectedPaymentMethodId = '');
+        return;
+      }
+      final stillValid = next.any((m) => m.id == selectedPaymentMethodId);
+      if (!stillValid) {
+        final def = ref.read(defaultPaymentMethodProvider);
+        setState(
+          () => selectedPaymentMethodId = def?.id ?? next.first.id,
+        );
+      }
+    });
+
     final horizontalPadding = AppLayout.horizontalPadding(context);
 
     return Scaffold(
@@ -87,25 +105,43 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
                 // Payment Method Selection
                 Text(
-                  'Select Payment Method',
+                  'Pay with',
                   style: Styles.headlineStyle3,
                 ),
-                const Gap(12),
-                ...List.generate(
-                  paymentMethods.length,
-                  (index) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: _buildPaymentMethodOption(
-                      paymentMethods[index],
-                      selectedPaymentMethodId == paymentMethods[index].id,
-                      () {
-                        setState(() {
-                          selectedPaymentMethodId = paymentMethods[index].id;
-                        });
-                      },
+                const Gap(6),
+                Text(
+                  'Tap a card to use it for this booking.',
+                  style: Styles.headlineStyle4,
+                ),
+                const Gap(14),
+                if (paymentMethods.isEmpty)
+                  _CheckoutPaymentEmptyHint(
+                    onAddPayment: () async {
+                      await Navigator.push<void>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PaymentMethodsScreen(),
+                        ),
+                      );
+                    },
+                  )
+                else
+                  ...List.generate(
+                    paymentMethods.length,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: _buildPaymentMethodOption(
+                        paymentMethods[index],
+                        selectedPaymentMethodId == paymentMethods[index].id,
+                        () {
+                          setState(() {
+                            selectedPaymentMethodId =
+                                paymentMethods[index].id;
+                          });
+                        },
+                      ),
                     ),
                   ),
-                ),
                 const Gap(24),
 
                 // Price Breakdown
@@ -126,7 +162,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                       ),
                     ),
                     child: isProcessing
-                        ? SizedBox(
+                        ? const SizedBox(
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(
@@ -192,7 +228,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               ),
               Column(
                 children: [
-                  Icon(
+                  const Icon(
                     FluentSystemIcons.ic_fluent_airplane_regular,
                     color: Styles.primarycolor,
                     size: 24,
@@ -288,7 +324,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             ),
             child: Row(
               children: [
-                Icon(
+                const Icon(
                   FluentSystemIcons.ic_fluent_person_regular,
                   color: Styles.primarycolor,
                 ),
@@ -328,7 +364,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
               value: method.id,
               groupValue: selectedPaymentMethodId,
               onChanged: (_) => onTap(),
-              fillColor: MaterialStateProperty.all(Styles.primarycolor),
+              fillColor: WidgetStateProperty.all(Styles.primarycolor),
             ),
             const Gap(12),
             Expanded(
@@ -473,22 +509,22 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
 
       setState(() => isProcessing = false);
 
+      if (!mounted) return;
+
       NotificationService().showSuccess(
         context,
         'Booking completed successfully!',
       );
 
-      // Navigate to confirmation screen
-      if (mounted) {
-        Navigator.pushReplacementNamed(
-          context,
-          '/ticket-confirmation',
-          arguments: {
-            'ticket': widget.ticket,
-            'booking': booking,
-          },
-        );
-      }
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => TicketConfirmationScreen(
+            ticket: widget.ticket,
+            booking: booking,
+          ),
+        ),
+      );
     } catch (e) {
       setState(() => isProcessing = false);
       if (mounted) {
@@ -496,5 +532,53 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             .showError(context, 'Booking failed. Please try again.');
       }
     }
+  }
+}
+
+class _CheckoutPaymentEmptyHint extends StatelessWidget {
+  final VoidCallback onAddPayment;
+
+  const _CheckoutPaymentEmptyHint({required this.onAddPayment});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Styles.surfaceColor,
+        borderRadius: BorderRadius.circular(Styles.radius),
+        border: Border.all(color: Styles.lineColor.withValues(alpha: 0.65)),
+        boxShadow: Styles.softShadow,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.credit_card_rounded, color: Styles.primarycolor),
+              const Gap(12),
+              Expanded(
+                child: Text(
+                  'No saved cards yet',
+                  style: Styles.headlineStyle3,
+                ),
+              ),
+            ],
+          ),
+          const Gap(8),
+          Text(
+            'Add a secure card here — checkout becomes one tap next time.',
+            style: Styles.headlineStyle4,
+          ),
+          const Gap(16),
+          FilledButton.icon(
+            onPressed: onAddPayment,
+            icon: const Icon(Icons.add_rounded),
+            label: const Text('Add payment method'),
+          ),
+        ],
+      ),
+    );
   }
 }

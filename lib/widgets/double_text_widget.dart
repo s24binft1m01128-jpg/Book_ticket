@@ -31,13 +31,19 @@ class DoubleTextWidget extends StatelessWidget {
           onPressed: onTap,
           style: TextButton.styleFrom(
             foregroundColor: Styles.primarycolor,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             minimumSize: const Size(64, 40),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
           ),
           child: Text(
             smalltext,
-            style: Styles.textStyle.copyWith(color: Styles.primarycolor),
+            style: Styles.headlineStyle4.copyWith(
+              color: Styles.primarycolor,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
       ],

@@ -120,8 +120,8 @@ class HotelScreen extends StatelessWidget {
                       ),
                     ),
                     const Gap(4),
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 3),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 3),
                       child: Text(
                         '/night',
                         style: Styles.headlineStyle4,

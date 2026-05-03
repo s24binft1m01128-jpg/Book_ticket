@@ -22,8 +22,16 @@ class PaymentMethod {
     required this.cardBrand,
   });
 
-  String get maskedCardNumber =>
-      '**** **** **** ${cardNumber.substring(cardNumber.length - 4)}';
+  String get _digitsOnly => cardNumber.replaceAll(RegExp(r'\D'), '');
+
+  String get maskedCardNumber {
+    final d = _digitsOnly;
+    if (d.length < 4) {
+      return d.isEmpty ? '•••• •••• •••• ••••' : '•••• •••• •••• ${d.padLeft(4, '•')}';
+    }
+    final last4 = d.substring(d.length - 4);
+    return '•••• •••• •••• $last4';
+  }
 
   PaymentMethod copyWith({
     String? id,
