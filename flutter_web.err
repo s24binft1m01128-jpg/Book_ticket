@@ -1,0 +1,2 @@
+Warning: In index.html:37: Local variable for "serviceWorkerVersion" is deprecated. Use "{{flutter_service_worker_version}}" template token instead. See https://docs.flutter.dev/platform-integration/web/initialization for more details.
+Warning: In index.html:46: "FlutterLoader.loadEntrypoint" is deprecated. Use "FlutterLoader.load" instead. See https://docs.flutter.dev/platform-integration/web/initialization for more details.
